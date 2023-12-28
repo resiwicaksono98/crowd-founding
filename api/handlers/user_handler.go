@@ -7,6 +7,7 @@ import (
 
 	"crowd-founding/helper"
 	"crowd-founding/pkg/auth"
+	"crowd-founding/pkg/entity"
 	"crowd-founding/pkg/user"
 )
 
@@ -127,8 +128,8 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 		c.JSON(http.StatusBadGateway, response)
 		return
 	}
-
-	userID := 7
+	currentUser := c.MustGet("currentUser").(entity.User)
+	userID := currentUser.ID
 	_, err = h.userService.SaveAvatar(userID, path)
 	if err != nil {
 		data := gin.H{"isUploaded": false}

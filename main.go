@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"crowd-founding/api/handlers"
+	"crowd-founding/pkg/auth"
 	"crowd-founding/pkg/user"
 )
 
@@ -21,7 +22,8 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
-	userHandler := handlers.NewUserHandler(userService)
+	authService := auth.NewService()
+	userHandler := handlers.NewUserHandler(userService, authService)
 	router := gin.Default()
 	api := router.Group("/api/v1")
 	api.POST("/users", userHandler.RegisterUser)
